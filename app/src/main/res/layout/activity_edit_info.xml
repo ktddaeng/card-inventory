@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.gadau.sqldemo.EditInfo">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_edit"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <RelativeLayout
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="16dp"
+            android:layout_gravity="start">
+            <ImageView
+                android:id="@+id/button_cancel"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_close_white_24dp"/>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorMenuText"
+            android:textAllCaps="true"
+            android:layout_gravity="end"
+            android:layout_margin="16dp"
+            android:textSize="16sp"
+            android:text="@string/str_button_save"/>
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        style="@style/EditInput"
+        android:id="@+id/input_idWrapper"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextViewInput"
+            android:text="@string/label_ID"
+            android:id="@+id/textView1" />
+
+        <EditText
+            android:id="@+id/input_dialog_ID"
+            style="@style/TextField"
+            android:hint="@string/hint_ID"
+            android:inputType="phone"/>
+    </RelativeLayout>
+    <View style="@style/LineDivider"/>
+
+    <RelativeLayout
+        android:id="@+id/input_vendorWrapper"
+        style="@style/EditInput"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextViewInput"
+            android:text="@string/label_vendor"
+            android:id="@+id/textView2" />
+
+        <EditText
+            android:id="@+id/input_dialog_vendor"
+            style="@style/TextField"
+            android:hint="@string/hint_vendor"
+            android:inputType="phone"/>
+    </RelativeLayout>
+    <View style="@style/LineDivider"/>
+
+    <RelativeLayout
+        android:id="@+id/input_locWrapper"
+        style="@style/EditInput"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextViewInput"
+            android:text="@string/label_loc"
+            android:id="@+id/textView3" />
+
+        <TextView
+            android:id="@+id/input_dialog_location"
+            style="@style/TextField1"
+            android:text="@string/hint_loc" />
+    </RelativeLayout>
+    <View style="@style/LineDivider"/>
+
+    <RelativeLayout
+        android:id="@+id/input_qtyWrapper"
+        style="@style/EditInput"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView4"
+            style="@style/TextViewInput"
+            android:text="@string/label_qty" />
+
+        <EditText
+            android:id="@+id/input_dialog_qty"
+            style="@style/TextField"
+            android:hint="@string/hint_qty"
+            android:inputType="phone" />
+    </RelativeLayout>
+    <View style="@style/LineDivider"/>
+</LinearLayout>

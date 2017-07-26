@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.gadau.sqldemo.InfoPage">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_info"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        style="@style/EditInput"
+        android:id="@+id/input_idWrapper"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextViewInput"
+            android:text="@string/label_ID" />
+
+        <TextView
+            android:id="@+id/output_id"
+            style="@style/TextField1"
+            tools:text="12345"/>
+    </RelativeLayout>
+    <View style="@style/LineDivider"/>
+
+    <RelativeLayout
+        android:id="@+id/input_vendorWrapper"
+        style="@style/EditInput"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextViewInput"
+            android:text="@string/label_vendor" />
+
+        <TextView
+            android:id="@+id/output_vendor"
+            style="@style/TextField1"
+            tools:text="12345"/>
+    </RelativeLayout>
+    <View style="@style/LineDivider"/>
+
+    <RelativeLayout
+        android:id="@+id/input_locWrapper"
+        style="@style/EditInput"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextViewInput"
+            android:text="@string/label_loc" />
+
+        <TextView
+            android:id="@+id/output_location"
+            style="@style/TextField1"
+            tools:text="A2"/>
+    </RelativeLayout>
+    <View style="@style/LineDivider"/>
+
+    <RelativeLayout
+        android:id="@+id/input_qtyWrapper"
+        style="@style/EditInput"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/TextViewInput"
+            android:text="@string/label_qty" />
+
+        <TextView
+            android:id="@+id/output_qty"
+            style="@style/TextField1"
+            tools:text="66"/>
+    </RelativeLayout>
+    <View style="@style/LineDivider"/>
+
+</LinearLayout>
