@@ -16,15 +16,14 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
         <RelativeLayout
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_margin="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="start">
             <ImageView
                 android:id="@+id/button_cancel"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_centerHorizontal="true"
+                android:layout_marginRight="16dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_close_white_24dp"/>
         </RelativeLayout>
@@ -35,7 +34,7 @@
             android:textColor="@color/colorMenuText"
             android:textAllCaps="true"
             android:layout_gravity="end"
-            android:layout_margin="16dp"
+            android:padding="16dp"
             android:textSize="16sp"
             android:text="@string/str_button_save"/>
 

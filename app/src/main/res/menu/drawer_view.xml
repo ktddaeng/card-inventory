@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_one_home"
+            android:icon="@drawable/ic_close_white_24dp"
+            android:title="Home"/>
+        <item android:title="Look Up Items">
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_two_search"
+                    android:icon="@drawable/ic_close_white_24dp"
+                    android:title="Search Item"/>
+                <item
+                    android:id="@+id/nav_three_scan"
+                    android:icon="@drawable/ic_close_white_24dp"
+                    android:title="Scan Item"/>
+                <item
+                    android:id="@+id/nav_four_man"
+                    android:icon="@drawable/ic_close_white_24dp"
+                    android:title="Manually Add"/>
+            </group>
+        </item>
+        <item
+            android:id="@+id/nav_five_list"
+            android:icon="@drawable/ic_close_white_24dp"
+            android:title="List View"/>
+    </group>
+</menu>
