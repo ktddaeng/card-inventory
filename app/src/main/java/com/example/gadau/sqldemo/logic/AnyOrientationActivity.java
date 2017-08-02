@@ -1,4 +1,4 @@
-package com.example.gadau.sqldemo;
+package com.example.gadau.sqldemo.logic;
 
 import com.journeyapps.barcodescanner.CaptureActivity;
 

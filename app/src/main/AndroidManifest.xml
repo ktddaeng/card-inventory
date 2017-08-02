@@ -9,22 +9,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".InfoPage" />
+        <activity android:name=".view.MainActivity" />
+        <activity android:name=".view.InfoPage" />
         <activity
-            android:name=".AnyOrientationActivity"
+            android:name=".logic.AnyOrientationActivity"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".EditInfo" />
-        <activity android:name=".StartPageActivity">
+        <activity android:name=".view.EditInfo" />
+        <activity android:name=".view.StartPageActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NavActivity"></activity>
+        <activity android:name=".view.ListActivity"></activity>
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.gadau.sqldemo.MainActivity">
+    tools:context="com.example.gadau.sqldemo.view.MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_edit"
@@ -21,14 +21,13 @@
             android:layout_margin="16dp"
             android:layout_gravity="start">
             <ImageView
-                android:id="@+id/button_cancel"
+                android:id="@+id/button_cancel2"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_close_white_24dp"/>
+                android:src="@drawable/ic_navigate_before_white_24dp"/>
         </RelativeLayout>
-
     </android.support.v7.widget.Toolbar>
 
     <!--TEST 1: BASIC INPUT AND OUTPUT-->

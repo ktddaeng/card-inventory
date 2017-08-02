@@ -12,7 +12,8 @@
     <string name="hint_vendor">Enter Vendor ID</string>
     <string name="hint_loc">A1</string>
     <string name="hint_qty">Enter Quantity</string>
-    <string name="dialog_loc">Please enter item location</string>
+    <string name="dialog_loc">Note: For seasonal items, label items as Y (Valentines) or Z (Christmas).</string>
+    <string name="dialog_qty">Note: If 6 or over, please indicate quantity as 6+.</string>
     <string name="label_ID">Item ID</string>
     <string name="label_vendor">Vendor ID</string>
     <string name="label_loc">Location</string>
@@ -25,5 +26,10 @@
     <string name="closeDrawer">close_drawer</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sample_id">12345</string>
+    <string name="sample_pos">A2</string>
+    <string name="sample_qty">12</string>
+    <string name="list_label_itemno">Item No.</string>
+    <string name="list_label_position">Position</string>
+    <string name="list_label_qty">Quantity</string>
 </resources>

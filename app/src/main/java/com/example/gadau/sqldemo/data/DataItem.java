@@ -1,4 +1,4 @@
-package com.example.gadau.sqldemo;
+package com.example.gadau.sqldemo.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

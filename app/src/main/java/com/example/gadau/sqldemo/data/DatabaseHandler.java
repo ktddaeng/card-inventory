@@ -1,12 +1,10 @@
-package com.example.gadau.sqldemo;
+package com.example.gadau.sqldemo.data;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +13,7 @@ import java.util.List;
  * Created by gadau on 7/10/2017.
  */
 
-public class DatabaseHandler extends SQLiteOpenHelper {
+public class DatabaseHandler extends SQLiteOpenHelper implements DataSourceInterface{
 
     //STATIC VARIABLES
     private static DatabaseHandler instance;
@@ -36,6 +34,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_ROW = "row";
     private static final String KEY_COL = "col";
     private static final String KEY_QTY = "qty";
+
+    //Order By Query Codes
+    private static final int ORDER_BY_ID = 11;
+    private static final int ORDER_BY_POS = 12;
+    private static final int ORDER_BY_QTY = 13;
+    private static final int ORDER_BY_SEASON = 14;
+    private static final int ORDER_BY_ALLID = 15;
 
     private DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -63,6 +68,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    @Override
     public void addItem(DataItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -77,6 +83,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    @Override
     public DataItem getItem(int id){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_INVENTORY,
@@ -93,6 +100,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return null;
     }
 
+    @Override
     public DataItem getItemByID(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_INVENTORY,
@@ -109,11 +117,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return null;
     }
 
-    public List<DataItem> getAllItems() {
+    @Override
+    public List<DataItem> getListofData(int order) {
         List<DataItem> listItems = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_INVENTORY;
+        /*
+        switch (order){
+            case ORDER_BY_ID:
+                selectQuery += " ORDER BY " + KEY_ITEMNO + " WHERE (" + KEY_QTY + " > 0)";
+                break;
+            case ORDER_BY_POS:
+                selectQuery += " ORDER BY " + KEY_COL + ", " + KEY_ROW  + " WHERE (" + KEY_QTY + " > 0)";
+                break;
+            case ORDER_BY_QTY:
+                selectQuery += " ORDER BY " + KEY_QTY + " WHERE (" + KEY_QTY + " > 0)";
+                break;
+            case ORDER_BY_SEASON:
+                selectQuery += "ORDER BY " + KEY_ITEMNO + " WHERE (" + KEY_COL + " == Y ) OR (" + KEY_COL + " == Z)";
+                break;
+            default: //allid do nothing
+        }*/
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        Cursor cursor = db.rawQuery(selectQuery, null); //TODO: Problem!!
 
         if (cursor.moveToFirst()) {
             do {
@@ -127,6 +152,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return listItems;
     }
 
+    @Override
     public Cursor getAllItemsCursor(){
         Cursor cursor = getReadableDatabase().query(TABLE_INVENTORY,
                 new String[]{KEY_ID, KEY_ITEMNO, KEY_VENDOR, KEY_ROW, KEY_COL,
@@ -135,6 +161,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return cursor;
     }
 
+    @Override
     public int getItemCount() {
         String countQuery = "SELECT * FROM " + TABLE_INVENTORY;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -143,6 +170,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return cursor.getCount();
     }
 
+    @Override
     public int updateItem(DataItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -158,6 +186,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //TODO: fix later
     }
 
+    @Override
     public void deleteItem(DataItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_INVENTORY, KEY_ID + " = ?",
@@ -166,6 +195,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //TODO: fix later
     }
 
+    @Override
     public void clearDatabase() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_INVENTORY);

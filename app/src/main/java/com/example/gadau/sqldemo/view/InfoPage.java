@@ -1,5 +1,6 @@
-package com.example.gadau.sqldemo;
+package com.example.gadau.sqldemo.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -8,8 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.gadau.sqldemo.R;
+import com.example.gadau.sqldemo.data.DataItem;
+import com.example.gadau.sqldemo.data.DatabaseHandler;
 
 public class InfoPage extends AppCompatActivity {
     private static final String EXTRA_ID = "EXTRA_ID";
@@ -17,9 +23,9 @@ public class InfoPage extends AppCompatActivity {
     private static final int WAS_CHANGED = 1;
     private static final String READY_TO_LOAD = "READY_TO_LOAD";
     private static final String IS_EXISTING = "IS_EXISTING";
-    private static final int REQUEST_CODE_EDIT = 234;
     private DataItem di;
     private String s;
+    private boolean isChanged = false;
     private DatabaseHandler dB;
 
     @Override
@@ -29,17 +35,40 @@ public class InfoPage extends AppCompatActivity {
         dB = DatabaseHandler.getInstance(this);
 
         //Set edit button in toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_info);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setTitle("Item Information"); toolbar.setSubtitle("");
+        setUpToolbar();
+        setUpButtons();
 
         //Take apart package for viewing
         Intent i = getIntent();
         s = getIntent().getExtras().getString(EXTRA_ID);
         fillData();
 
+    }
+
+    private void setUpToolbar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_info);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitle(""); toolbar.setSubtitle("");
+    }
+
+    private void setUpButtons(){
+        ImageView cancelButton = (ImageView)findViewById(R.id.button_cancel2);
+        ImageView editButton = (ImageView)findViewById(R.id.button_edit);
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchEditPage();
+            }
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InfoPage.this.finish();
+            }
+        });
     }
 
     private void fillData(){
@@ -71,24 +100,8 @@ public class InfoPage extends AppCompatActivity {
         if (requestCode == WAS_CHANGED){
             if (resultCode == RESULT_OK) {
                 fillData();
+                isChanged = true;
             }
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_item_info, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
-            case R.id.mi_edit:
-                launchEditPage();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 }

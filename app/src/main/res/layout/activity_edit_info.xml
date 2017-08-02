@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.gadau.sqldemo.EditInfo">
+    tools:context="com.example.gadau.sqldemo.view.EditInfo">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_edit"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="?attr/colorPrimary"
+        android:background="?attr/colorAccent"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
@@ -101,11 +101,10 @@
             style="@style/TextViewInput"
             android:text="@string/label_qty" />
 
-        <EditText
+        <TextView
             android:id="@+id/input_dialog_qty"
-            style="@style/TextField"
-            android:hint="@string/hint_qty"
-            android:inputType="phone" />
+            style="@style/TextField1"
+            android:text="0"/>
     </RelativeLayout>
     <View style="@style/LineDivider"/>
 </LinearLayout>

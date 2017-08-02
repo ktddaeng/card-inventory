@@ -1,17 +1,14 @@
-package com.example.gadau.sqldemo;
+package com.example.gadau.sqldemo.view;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -19,6 +16,10 @@ import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.gadau.sqldemo.R;
+import com.example.gadau.sqldemo.data.DataItem;
+import com.example.gadau.sqldemo.data.DatabaseHandler;
 
 public class EditInfo extends AppCompatActivity {
     private static final String EXTRA_ID = "EXTRA_ID";
@@ -28,6 +29,7 @@ public class EditInfo extends AppCompatActivity {
     private static final String[] letters = { "A", "B", "C", "D", "E",
             "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P",
             "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    private static final String[] qnums = {"0", "1", "2", "3", "4", "5", "6+"};
     private DataItem di;
     private boolean update_flag = false;
     private DatabaseHandler dB;
@@ -39,11 +41,7 @@ public class EditInfo extends AppCompatActivity {
         dB = DatabaseHandler.getInstance(this);
 
         //Set Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_edit);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setTitle(""); toolbar.setSubtitle("");
+        setUpToolbar();
 
         TextView saveButton = (TextView) findViewById(R.id.button_save);
         ImageView cancelButton = (ImageView) findViewById(R.id.button_cancel);
@@ -60,11 +58,12 @@ public class EditInfo extends AppCompatActivity {
         final EditText textID = (EditText) findViewById(R.id.input_dialog_ID);
         final EditText textVendor = (EditText) findViewById(R.id.input_dialog_vendor);
         final TextView textLoc = (TextView) findViewById(R.id.input_dialog_location);
-        final EditText textQty = (EditText) findViewById(R.id.input_dialog_qty);
+        final TextView textQty = (TextView) findViewById(R.id.input_dialog_qty);
 
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         if (getIntent().getExtras().getBoolean(READY_TO_LOAD)){
+            Toast.makeText(this, "Ready to Load", Toast.LENGTH_SHORT).show();
             textID.setText(s);
         }
 
@@ -129,19 +128,11 @@ public class EditInfo extends AppCompatActivity {
 
         qtyWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                textQty.requestFocus();
-                textQty.setSelection(textQty.getText().length());
-                imm.showSoftInput(textQty, InputMethodManager.SHOW_IMPLICIT);
-            }
+            public void onClick(View v) { setQtyByDialog(); }
         });
         textQty.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                textQty.requestFocus();
-                textQty.setSelection(textQty.getText().length());
-                imm.showSoftInput(textQty, InputMethodManager.SHOW_IMPLICIT);
-            }
+            public void onClick(View v) { setQtyByDialog(); }
         });
 
         locWrapper.setOnClickListener(new View.OnClickListener() {
@@ -162,7 +153,19 @@ public class EditInfo extends AppCompatActivity {
         }
     }
 
-    void setLocationByDialog(){
+    private void setUpToolbar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_edit);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitle(""); toolbar.setSubtitle("");
+    }
+
+    private void setUpButtons(){
+
+    }
+
+    private void setLocationByDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(EditInfo.this);
         builder.setTitle("Choose Location");
         View subView = getLayoutInflater().inflate(R.layout.fragment_edit_location, null);
@@ -181,7 +184,7 @@ public class EditInfo extends AppCompatActivity {
         colPicker.setValue(col);
         colPicker.setDisplayedValues(letters);
         final NumberPicker rowPicker = (NumberPicker) subView.findViewById(R.id.dialog_picker_row);
-        rowPicker.setMaxValue(14);
+        rowPicker.setMaxValue(13);
         rowPicker.setMinValue(1);
         rowPicker.setValue(row);
         builder.setView(subView);
@@ -193,8 +196,48 @@ public class EditInfo extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         String s = (letters[(colPicker.getValue())]) +
                                 (Integer.toString(rowPicker.getValue()));
-                        dialog.dismiss();
                         locWrapper.setText(s);
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Toast.makeText(EditInfo.this, "Action Canceled", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void setQtyByDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditInfo.this);
+        builder.setTitle("Choose Quantity");
+        View subView = getLayoutInflater().inflate(R.layout.fragment_edit_qty, null);
+        final TextView qtyWrapper = (TextView) findViewById(R.id.input_dialog_qty);
+        int col = 0;
+        for (int i=0;i<qnums.length;i++) {
+            if (qnums[i].equals(String.valueOf( qtyWrapper.getText().toString()))) {
+                col = i;
+                break;
+            }
+        }
+        final NumberPicker qtyPicker = (NumberPicker) subView.findViewById(R.id.dialog_picker_qty);
+        qtyPicker.setMaxValue(6);
+        qtyPicker.setMinValue(0);
+        qtyPicker.setValue(col);
+        qtyPicker.setDisplayedValues(qnums);
+        qtyPicker.setWrapSelectorWheel(false);
+        builder.setView(subView);
+
+        builder
+                .setCancelable(true)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String s = (qnums[(qtyPicker.getValue())]);
+                        qtyWrapper.setText(s);
                         dialog.dismiss();
                     }
                 })
@@ -242,7 +285,7 @@ public class EditInfo extends AppCompatActivity {
         EditText idWrapper = (EditText) findViewById(R.id.input_dialog_ID);
         EditText vendorWrapper = (EditText) findViewById(R.id.input_dialog_vendor);
         TextView locWrapper = (TextView) findViewById(R.id.input_dialog_location);
-        EditText qtyWrapper = (EditText) findViewById(R.id.input_dialog_qty);
+        TextView qtyWrapper = (TextView) findViewById(R.id.input_dialog_qty);
 
         String s = idWrapper.getText().toString().trim();
         if (s.isEmpty() || s.length() == 0 || s.equals("") || s == null){
