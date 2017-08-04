@@ -1,14 +1,17 @@
 package com.example.gadau.sqldemo.view;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +26,9 @@ import com.example.gadau.sqldemo.logic.LineAdapter;
 
 import java.util.List;
 
-public class ListActivity extends AppCompatActivity {
+public class ListActivity extends AppCompatActivity
+        implements PopupMenu.OnMenuItemClickListener,
+        LineAdapter.ItemClickListener{
     private static final String EXTRA_ID = "EXTRA_ID";
     private static final String READY_TO_LOAD = "READY_TO_LOAD";
     private static final String IS_EXISTING = "IS_EXISTING";
@@ -31,20 +36,30 @@ public class ListActivity extends AppCompatActivity {
 
     private List<DataItem> listOfData;
     private DatabaseHandler dB;
-    private SwipeRefreshLayout swiper;
+    private SwipeRefreshLayout swiperRefresh;
     private RecyclerView mRecyclerView;
     private LineAdapter mAdapter;
+    private int order_state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        order_state = Contants.ORDER_NONE;
         setContentView(R.layout.activity_list);
         setUpToolbar();
 
         dB = DatabaseHandler.getInstance(this);
-        listOfData = dB.getListofData(Contants.ORDER_NONE);
+        listOfData = dB.getListofData(order_state);
         setupRecycler();
         setupSwiper();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mRecyclerView != null) {
+            refreshPage(order_state);
+        }
     }
 
     private void setUpToolbar(){
@@ -55,33 +70,16 @@ public class ListActivity extends AppCompatActivity {
         toolbar.setTitle(""); toolbar.setSubtitle("");
 
         ImageView backButton = (ImageView) findViewById(R.id.button_cancel2);
-        ImageView exportButton = (ImageView) findViewById(R.id.button_export);
         ImageView sortButton = (ImageView) findViewById(R.id.button_sort);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { ListActivity.this.finish(); }
         });
-        exportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                exportLog();
-            }
-        });
         sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sortPage();
-            }
-        });
-    }
-
-    private void setupSwiper() {
-        swiper = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        swiper.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshPage(Contants.ORDER_NONE);
             }
         });
     }
@@ -94,14 +92,34 @@ public class ListActivity extends AppCompatActivity {
 
         mAdapter = new LineAdapter(listOfData);
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setClickListener(this);
 
         mRecyclerView.addItemDecoration(
-                new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL)
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         );
     }
 
+    /*PULL UP EDIT INFO PAGE*/
+    @Override
+    public void onClick(View view, int position) {
+        final DataItem data = listOfData.get(position);
+        Intent intent = new Intent(this, InfoPage.class);
+        intent.putExtra(Contants.EXTRA_ID, data.getID());
+        startActivity(intent);
+    }
+
+    /*REFRESH PAGE*/
+    private void setupSwiper() {
+        swiperRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swiperRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshPage(order_state);
+            }
+        });
+    }
+
     private void refreshPage(int order) {
-        Toast.makeText(this, "Refreshing Page!", Toast.LENGTH_SHORT).show();
         //Load Items
         listOfData = dB.getListofData(order);
         onItemsLoadComplete();
@@ -110,42 +128,106 @@ public class ListActivity extends AppCompatActivity {
     void onItemsLoadComplete(){
         //Update adapter and notify dataset change
         mAdapter.updateData(listOfData);
-        swiper.setRefreshing(false);
+        swiperRefresh.setRefreshing(false);
     }
 
+    /*MENU OPTIONS*/
+    public void showMenu(View v){
+        PopupMenu popup = new PopupMenu(this, v);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.options_main_activity, popup.getMenu());
+        popup.show();
+        popup.setOnMenuItemClickListener(this);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.options_main_export:
+                Toast.makeText(this, "Export DB!", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.options_main_help:
+                Toast.makeText(this, "Pulling help", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.options_main_purge:
+                onPurge();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /*PURGE DATABASE*/
+    private void onPurge() {
+        AlertDialog.Builder alertA = new AlertDialog.Builder(this);
+        alertA.setTitle("Delete the Database?");
+        //should make icons to follow the different options.
+        alertA
+                .setMessage("Are you sure you want to delete the database?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which){
+                        //Go Edit Data
+                        dialog.dismiss();
+                        clearDatabase();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Cancel the dialog
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog alertDialog = alertA.create();
+        alertDialog.show();
+    }
+
+    private void clearDatabase(){
+        dB.clearDatabase();
+        Toast.makeText(this, "Database has been cleared!", Toast.LENGTH_SHORT);
+        refreshPage(Contants.ORDER_NONE);
+    }
+
+    /*EXPORT DATABASE*/
     private void exportLog() {
         Toast.makeText(this, "Exporting Inventory!", Toast.LENGTH_SHORT).show();
     }
 
-    //TODO: Make Dialog instead of Context Menu, because Context Menus Suck!!
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        menu.setHeaderTitle("Order List by...");
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.context_sort, menu);
+    /*SORT LIST*/
+    private void sortPage(){
+        AlertDialog.Builder alertA = new AlertDialog.Builder(this);
+        //should make icons to follow the different options.
+        alertA
+                .setTitle(R.string.context_sort_title)
+                .setItems(R.array.context_list, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        contextChoice(which);
+                    }
+                });
+        AlertDialog alertDialog = alertA.create();
+        alertDialog.show();
     }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sort_no:
-                if (item.isChecked()) item.setChecked(false);
-                else item.setChecked(true);
-                refreshPage(Contants.ORDER_BY_ID);
+    public boolean contextChoice(int item) {
+        switch (item) {
+            case 1:
+                Toast.makeText(this, "order by id", Toast.LENGTH_SHORT).show();
+                order_state = Contants.ORDER_BY_ID;
+                refreshPage(order_state);
                 return true;
-            case R.id.sort_pos:
-                if (item.isChecked()) item.setChecked(false);
-                else item.setChecked(true);
-                refreshPage(Contants.ORDER_BY_POS);
+            case 2:
+                Toast.makeText(this, "order by pos", Toast.LENGTH_SHORT).show();
+                order_state = Contants.ORDER_BY_POS;
+                refreshPage(order_state);
                 return true;
-            case R.id.sort_qty:
-                if (item.isChecked()) item.setChecked(false);
-                else item.setChecked(true);
-                refreshPage(Contants.ORDER_BY_QTY);
-                return true;
+            case 3:
+                Toast.makeText(this, "order by qty", Toast.LENGTH_SHORT).show();
+                order_state = Contants.ORDER_BY_QTY;
+                refreshPage(order_state);
             default:
-                return super.onContextItemSelected(item);
+                return true;
         }
     }
 

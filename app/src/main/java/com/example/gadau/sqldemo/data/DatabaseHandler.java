@@ -54,7 +54,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_INVENTORY = "CREATE TABLE " +
                 TABLE_INVENTORY + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + KEY_ITEMNO + " INTEGER, " + KEY_VENDOR + " INTEGER, "
+                + KEY_ITEMNO + " TEXT, " + KEY_VENDOR + " TEXT, "
                 + KEY_ROW + " TEXT, " + KEY_COL + " TEXT, " + KEY_QTY + " INTEGER)";
         db.execSQL(CREATE_INVENTORY);
     }
@@ -184,9 +184,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void deleteItem(DataItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_INVENTORY, KEY_ID + " = ?",
+        db.delete(TABLE_INVENTORY, KEY_ITEMNO + " = ?",
                 new String[] { String.valueOf(item.getID()) });
-        db.close();;
         //TODO: fix later
     }
 

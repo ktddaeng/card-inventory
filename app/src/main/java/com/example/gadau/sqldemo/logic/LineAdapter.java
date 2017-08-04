@@ -1,23 +1,26 @@
 package com.example.gadau.sqldemo.logic;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gadau.sqldemo.data.DataItem;
-import com.example.gadau.sqldemo.view.FragListItem;
 import com.example.gadau.sqldemo.R;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by gadau on 8/2/2017.
  */
 
-public class LineAdapter extends RecyclerView.Adapter<FragListItem> {
+public class LineAdapter extends RecyclerView.Adapter<LineAdapter.FragListItem> {
     private final List<DataItem> inventory;
+    private Context mContext;
+    private ItemClickListener clickListener;
 
     public LineAdapter(List<DataItem> inventory) {
         this.inventory = inventory;
@@ -25,8 +28,9 @@ public class LineAdapter extends RecyclerView.Adapter<FragListItem> {
 
     @Override
     public FragListItem onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new FragListItem(LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.fragment_list_item, parent, false));
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_list_item, parent, false);
+        mContext = parent.getContext();
+        return new FragListItem(v);
     }
 
     @Override
@@ -36,14 +40,45 @@ public class LineAdapter extends RecyclerView.Adapter<FragListItem> {
         holder.itemQty.setText(inventory.get(position).getQty());
     }
 
+    //TODO: Enable Edit Info Page to be opened on item click
     @Override
     public int getItemCount() {
         return inventory != null ? inventory.size() : 0;
+    }
+
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.clickListener = itemClickListener;
     }
 
     public void updateData(List<DataItem> list){
         inventory.clear();
         inventory.addAll(list);
         notifyDataSetChanged();
+    }
+
+    public class FragListItem extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+        public TextView itemID;
+        public TextView itemLoc;
+        public TextView itemQty;
+        private final Context context;
+
+        public FragListItem (View itemView){
+            super(itemView);
+            context = itemView.getContext();
+            itemView.setOnClickListener(this);
+            itemID = (TextView) itemView.findViewById(R.id.list_id);
+            itemLoc = (TextView) itemView.findViewById(R.id.list_loc);
+            itemQty = (TextView) itemView.findViewById(R.id.list_qty);
+        }
+
+        @Override
+        public void onClick(View v) {
+            clickListener.onClick(v, getAdapterPosition());
+        }
+    }
+
+    public interface ItemClickListener {
+        void onClick(View view, int position);
     }
 }

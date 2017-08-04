@@ -6,6 +6,8 @@
     <string name="str_button_manual">Manual</string>
     <string name="str_button_save">Save</string>
     <string name="str_button_purge">Purge</string>
+    <string name="str_button_export">Export</string>
+    <string name="str_button_help">Help</string>
     <string name="str_button_list">List</string>
 
     <string name="hint_ID">Enter Item ID</string>
@@ -18,6 +20,7 @@
     <string name="label_vendor">Vendor ID</string>
     <string name="label_loc">Location</string>
     <string name="label_qty">Quantity</string>
+    <string name="label_delete">Delete Item?</string>
     <string name="title_activity_navigation">NavigationActivity</string>
 
     <string name="drawer_open">Open navigation drawer</string>
@@ -25,16 +28,19 @@
     <string name="openDrawer">open_drawer</string>
     <string name="closeDrawer">close_drawer</string>
 
-    <string name="context_sort_title">Sort List by</string>
-    <string name="context_sort_option1">Quantity</string>
-    <string name="context_sort_option2">Item Number</string>
-    <string name="context_sort_option3">Location</string>
-
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="sample_id">12345</string>
+    <string name="sample_id">01234</string>
     <string name="sample_pos">A2</string>
     <string name="sample_qty">12</string>
     <string name="list_label_itemno">Item No.</string>
     <string name="list_label_position">Position</string>
     <string name="list_label_qty">Quantity</string>
+
+    <string name="context_sort_title">Sort List by</string>
+    <string-array
+        name="context_list">
+        <item>Quantity</item>
+        <item>Item Number</item>
+        <item>Location</item>
+    </string-array>
 </resources>

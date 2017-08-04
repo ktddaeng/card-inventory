@@ -2,6 +2,7 @@ package com.example.gadau.sqldemo.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 /**
  * Created by gadau on 7/10/2017.
@@ -47,6 +48,7 @@ public class DataItem implements Parcelable{
     }
 
     public String getID() {
+        Log.i("DataItem Class: ", ID);
         return ID;
     }
 

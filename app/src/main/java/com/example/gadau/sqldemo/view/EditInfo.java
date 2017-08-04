@@ -52,6 +52,7 @@ public class EditInfo extends AppCompatActivity {
         final View vendorWrapper = (View) findViewById(R.id.input_vendorWrapper);
         final View locWrapper = (View) findViewById(R.id.input_locWrapper);
         final View qtyWrapper = (View) findViewById(R.id.input_qtyWrapper);
+        final View deleteWrapper = (View) findViewById(R.id.input_delete);
         final EditText textID = (EditText) findViewById(R.id.input_dialog_ID);
         final EditText textVendor = (EditText) findViewById(R.id.input_dialog_vendor);
         final TextView textLoc = (TextView) findViewById(R.id.input_dialog_location);
@@ -60,7 +61,6 @@ public class EditInfo extends AppCompatActivity {
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         if (getIntent().getExtras().getBoolean(Contants.READY_TO_LOAD)){
-            Toast.makeText(this, "Ready to Load", Toast.LENGTH_SHORT).show();
             textID.setText(s);
         }
 
@@ -73,6 +73,7 @@ public class EditInfo extends AppCompatActivity {
         } else {
             di = new DataItem(s, v);
             textVendor.setText(v);
+            deleteWrapper.setVisibility(View.GONE);
         }
 
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -145,6 +146,13 @@ public class EditInfo extends AppCompatActivity {
             }
         });
 
+        deleteWrapper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteItem(di);
+            }
+        });
+
         if (savedInstanceState != null){
             finish();
         }
@@ -156,10 +164,6 @@ public class EditInfo extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setTitle(""); toolbar.setSubtitle("");
-    }
-
-    private void setUpButtons(){
-
     }
 
     private void setLocationByDialog(){
@@ -276,6 +280,34 @@ public class EditInfo extends AppCompatActivity {
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_CANCELED, returnIntent);
         EditInfo.this.finish();
+    }
+
+    private void deleteItem(DataItem d) {
+        final DataItem dataItem = d;
+        AlertDialog.Builder alertA = new AlertDialog.Builder(this);
+        alertA.setTitle("Deleting Item");
+        //should make icons to follow the different options.
+        alertA
+                .setMessage("Are you sure you want to delete this item? This action cannot be undone.")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which){
+                        dialog.dismiss();
+                        dB.deleteItem(dataItem);
+                        Intent returnIntent = new Intent();
+                        setResult(Contants.RESULT_DELETED, returnIntent);
+                        EditInfo.this.finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Cancel the dialog
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog alertDialog = alertA.create();
+        alertDialog.show();
     }
 
     private boolean safetyCheck(){

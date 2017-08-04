@@ -48,7 +48,7 @@
         android:id="@+id/input_idWrapper"
         android:orientation="horizontal">
         <TextView
-            style="@style/TextViewInput"
+            style="@style/TextViewInput.Field"
             android:text="@string/label_ID" />
 
         <TextView
@@ -63,7 +63,7 @@
         style="@style/EditInput"
         android:orientation="horizontal">
         <TextView
-            style="@style/TextViewInput"
+            style="@style/TextViewInput.Field"
             android:text="@string/label_vendor" />
 
         <TextView
@@ -78,7 +78,7 @@
         style="@style/EditInput"
         android:orientation="horizontal">
         <TextView
-            style="@style/TextViewInput"
+            style="@style/TextViewInput.Field"
             android:text="@string/label_loc" />
 
         <TextView
@@ -94,7 +94,7 @@
         android:orientation="horizontal">
 
         <TextView
-            style="@style/TextViewInput"
+            style="@style/TextViewInput.Field"
             android:text="@string/label_qty" />
 
         <TextView
@@ -103,5 +103,4 @@
             tools:text="66"/>
     </RelativeLayout>
     <View style="@style/LineDivider"/>
-
 </LinearLayout>

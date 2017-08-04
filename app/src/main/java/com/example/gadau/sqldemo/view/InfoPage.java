@@ -98,6 +98,9 @@ public class InfoPage extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 fillData();
                 isChanged = true;
+            } else if (resultCode == Contants.RESULT_DELETED) {
+                Toast.makeText(this, "Item Deleted", Toast.LENGTH_SHORT).show();
+                finish();
             }
         }
     }

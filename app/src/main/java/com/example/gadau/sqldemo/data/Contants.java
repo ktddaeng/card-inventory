@@ -15,6 +15,7 @@ public class Contants {
     public static final String EXTRA_VENDOR = "EXTRA_VENDOR";
     public static final String READY_TO_LOAD = "READY_TO_LOAD";
     public static final String IS_EXISTING = "IS_EXISTING";
+    public static final int RESULT_DELETED = 12345;
     public static final int INDEX_VENDOR_INIT = 1;
     public static final int INDEX_VENDOR_FIN = 6;
     public static final int INDEX_CARD_INIT = 6;

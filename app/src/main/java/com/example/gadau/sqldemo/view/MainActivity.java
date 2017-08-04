@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +23,7 @@ import com.example.gadau.sqldemo.logic.AnyOrientationActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     final Context context = this;
     private DatabaseHandler dB;
 
@@ -56,34 +59,6 @@ public class MainActivity extends AppCompatActivity {
                 barcodeMode();
             }
         });
-        Button purgeButton = (Button) findViewById(R.id.purge_button);
-        purgeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alertA = new AlertDialog.Builder(context);
-                alertA.setTitle("Delete the Database?");
-                //should make icons to follow the different options.
-                alertA
-                        .setMessage("Are you sure you want to delete the database?")
-                        .setCancelable(true)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int which){
-                                //Go Edit Data
-                                dialog.dismiss();
-                                clearDatabase();
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //Cancel the dialog
-                                dialog.dismiss();
-                            }
-                        });
-                AlertDialog alertDialog = alertA.create();
-                alertDialog.show();
-            }
-        });
         Button manualButton = (Button) findViewById(R.id.manual_button);
         manualButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,13 +84,13 @@ public class MainActivity extends AppCompatActivity {
         String s = gottenId;    //goes by 5 last char by default
         if (gottenId.length() == 12){
             s = gottenId.substring(Contants.INDEX_CARD_INIT, Contants.INDEX_CARD_FIN);
-
         } else if (gottenId.length() == 10) {
             s = gottenId.substring(Contants.INDEX_CARD_INIT - 1, Contants.INDEX_CARD_FIN - 1);
         } else {
             Toast.makeText(MainActivity.this, "Not a valid ID!", Toast.LENGTH_SHORT).show();
             return;
         }
+        //TODO: For some reason Card IDs that begin with 0 are truncated at the beginning
         DataItem di = dB.getItemByID(s);
 
         if (di != null) {
@@ -142,6 +117,30 @@ public class MainActivity extends AppCompatActivity {
         qrScan.initiateScan();
     }
 
+    public void showMenu(View v){
+        PopupMenu popup = new PopupMenu(this, v);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.options_main_activity, popup.getMenu());
+        popup.show();
+        popup.setOnMenuItemClickListener(this);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.options_main_export:
+                Toast.makeText(context, "Export DB!", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.options_main_help:
+                Toast.makeText(context, "Pulling help", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.options_main_purge:
+                onPurge();
+                return true;
+            default:
+                return false;
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -225,8 +224,33 @@ public class MainActivity extends AppCompatActivity {
         return i;
     }
 
+    private void onPurge() {
+        AlertDialog.Builder alertA = new AlertDialog.Builder(context);
+        alertA.setTitle("Delete the Database?");
+        //should make icons to follow the different options.
+        alertA
+                .setMessage("Are you sure you want to delete the database?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which){
+                        //Go Edit Data
+                        dialog.dismiss();
+                        clearDatabase();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Cancel the dialog
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog alertDialog = alertA.create();
+        alertDialog.show();
+    }
+
     private void clearDatabase(){
         dB.clearDatabase();
-        Toast.makeText(MainActivity.this, "Database has been cleared!", Toast.LENGTH_SHORT);
+        Toast.makeText(this, "Database has been cleared!", Toast.LENGTH_SHORT);
     }
 }

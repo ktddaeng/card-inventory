@@ -22,7 +22,7 @@
     <style name="LineDivider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">#0c000000</item>
+        <item name="android:background">#54000000</item>
     </style>
 
     <style name="EditInput">
@@ -34,8 +34,10 @@
     <style name="TextViewInput">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">#000</item>
         <item name="android:textSize">18sp</item>
+    </style>
+    <style name="TextViewInput.Field" parent="TextViewInput">
+        <item name="android:textColor">#000</item>
     </style>
 
     <style name="TextField">
