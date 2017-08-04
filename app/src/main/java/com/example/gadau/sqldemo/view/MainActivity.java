@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.gadau.sqldemo.R;
+import com.example.gadau.sqldemo.data.Contants;
 import com.example.gadau.sqldemo.data.DataItem;
 import com.example.gadau.sqldemo.data.DatabaseHandler;
 import com.example.gadau.sqldemo.logic.AnyOrientationActivity;
@@ -21,14 +22,6 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class MainActivity extends AppCompatActivity {
     final Context context = this;
-    private static final String EXTRA_ID = "EXTRA_ID";
-    private static final String EXTRA_VENDOR = "EXTRA_VENDOR";
-    private static final String READY_TO_LOAD = "READY_TO_LOAD";
-    private static final String IS_EXISTING = "IS_EXISTING";
-    private static final int INDEX_VENDOR_INIT = 1;
-    private static final int INDEX_VENDOR_FIN = 6;
-    private static final int INDEX_CARD_INIT = 6;
-    private static final int INDEX_CARD_FIN = 11;
     private DatabaseHandler dB;
 
     //Preliminary Database; This is NOT stored in memory
@@ -115,10 +108,10 @@ public class MainActivity extends AppCompatActivity {
     private void identifyID(String gottenId){
         String s = gottenId;    //goes by 5 last char by default
         if (gottenId.length() == 12){
-            s = gottenId.substring(INDEX_CARD_INIT, INDEX_CARD_FIN);
+            s = gottenId.substring(Contants.INDEX_CARD_INIT, Contants.INDEX_CARD_FIN);
 
         } else if (gottenId.length() == 10) {
-            s = gottenId.substring(INDEX_CARD_INIT - 1, INDEX_CARD_FIN - 1);
+            s = gottenId.substring(Contants.INDEX_CARD_INIT - 1, Contants.INDEX_CARD_FIN - 1);
         } else {
             Toast.makeText(MainActivity.this, "Not a valid ID!", Toast.LENGTH_SHORT).show();
             return;
@@ -135,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
     //Launches the Detailed View
     private void launchInfoPage(String itemID){
         Intent intent = new Intent(this, InfoPage.class);
-        intent.putExtra(EXTRA_ID, itemID);
+        intent.putExtra(Contants.EXTRA_ID, itemID);
         startActivity(intent);
     }
 
@@ -196,27 +189,27 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, EditInfo.class);
 
         if (!gotID) {
-            intent.putExtra(READY_TO_LOAD, false);
-            intent.putExtra(IS_EXISTING, false);
+            intent.putExtra(Contants.READY_TO_LOAD, false);
+            intent.putExtra(Contants.IS_EXISTING, false);
             startActivity(intent);
             return;
         }
         String s = id;
         String v = id;
         if (id.length() == 12){
-            s = id.substring(INDEX_CARD_INIT, INDEX_CARD_FIN);
-            v = id.substring(INDEX_VENDOR_INIT, INDEX_VENDOR_FIN);
+            s = id.substring(Contants.INDEX_CARD_INIT, Contants.INDEX_CARD_FIN);
+            v = id.substring(Contants.INDEX_VENDOR_INIT, Contants.INDEX_VENDOR_FIN);
         } else if (id.length() == 10) {
-            s = id.substring(INDEX_CARD_INIT - 1, INDEX_CARD_FIN - 1);
-            v = id.substring(INDEX_VENDOR_INIT - 1, INDEX_VENDOR_FIN - 1);
+            s = id.substring(Contants.INDEX_CARD_INIT - 1, Contants.INDEX_CARD_FIN - 1);
+            v = id.substring(Contants.INDEX_VENDOR_INIT - 1, Contants.INDEX_VENDOR_FIN - 1);
         } else {
             Toast.makeText(MainActivity.this, "ID Not Valid!", Toast.LENGTH_SHORT);
             return;
         }
-        intent.putExtra(EXTRA_ID, s);
-        intent.putExtra(EXTRA_VENDOR, v);
-        intent.putExtra(READY_TO_LOAD, true);
-        intent.putExtra(IS_EXISTING, false);
+        intent.putExtra(Contants.EXTRA_ID, s);
+        intent.putExtra(Contants.EXTRA_VENDOR, v);
+        intent.putExtra(Contants.READY_TO_LOAD, true);
+        intent.putExtra(Contants.IS_EXISTING, false);
         startActivity(intent);
     }
 

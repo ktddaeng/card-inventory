@@ -25,6 +25,11 @@
     <string name="openDrawer">open_drawer</string>
     <string name="closeDrawer">close_drawer</string>
 
+    <string name="context_sort_title">Sort List by</string>
+    <string name="context_sort_option1">Quantity</string>
+    <string name="context_sort_option2">Item Number</string>
+    <string name="context_sort_option3">Location</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="sample_id">12345</string>
     <string name="sample_pos">A2</string>

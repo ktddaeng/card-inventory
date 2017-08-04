@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.List;
  * Created by gadau on 7/10/2017.
  */
 
-public class DatabaseHandler extends SQLiteOpenHelper implements DataSourceInterface{
+public class DatabaseHandler extends SQLiteOpenHelper {
 
     //STATIC VARIABLES
     private static DatabaseHandler instance;
@@ -28,19 +30,14 @@ public class DatabaseHandler extends SQLiteOpenHelper implements DataSourceInter
     private static final String TABLE_INVENTORY = "inventory";
 
     //Column Names
-    private static final String KEY_ID = "id";
-    private static final String KEY_VENDOR = "vendor";
-    private static final String KEY_ITEMNO = "barcode";
-    private static final String KEY_ROW = "row";
-    private static final String KEY_COL = "col";
-    private static final String KEY_QTY = "qty";
+    private static final String KEY_ID = "inventory_id";
+    private static final String KEY_VENDOR = "inventory_vendor";
+    private static final String KEY_ITEMNO = "iventory_barcode";
+    private static final String KEY_ROW = "inventory_row";
+    private static final String KEY_COL = "inventory_col";
+    private static final String KEY_QTY = "inventory_qty";
 
     //Order By Query Codes
-    private static final int ORDER_BY_ID = 11;
-    private static final int ORDER_BY_POS = 12;
-    private static final int ORDER_BY_QTY = 13;
-    private static final int ORDER_BY_SEASON = 14;
-    private static final int ORDER_BY_ALLID = 15;
 
     private DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -68,7 +65,6 @@ public class DatabaseHandler extends SQLiteOpenHelper implements DataSourceInter
         onCreate(db);
     }
 
-    @Override
     public void addItem(DataItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -83,7 +79,6 @@ public class DatabaseHandler extends SQLiteOpenHelper implements DataSourceInter
         db.close();
     }
 
-    @Override
     public DataItem getItem(int id){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_INVENTORY,
@@ -100,7 +95,6 @@ public class DatabaseHandler extends SQLiteOpenHelper implements DataSourceInter
         return null;
     }
 
-    @Override
     public DataItem getItemByID(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_INVENTORY,
@@ -117,42 +111,45 @@ public class DatabaseHandler extends SQLiteOpenHelper implements DataSourceInter
         return null;
     }
 
-    @Override
     public List<DataItem> getListofData(int order) {
         List<DataItem> listItems = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + TABLE_INVENTORY;
-        /*
+        boolean excludeZeros = true; //TODO: DUmmy value, allow for customizing in parameters
+        String selectQuery = "SELECT * FROM " + TABLE_INVENTORY ;// + " ORDER BY " + KEY_QTY;
+
         switch (order){
-            case ORDER_BY_ID:
-                selectQuery += " ORDER BY " + KEY_ITEMNO + " WHERE (" + KEY_QTY + " > 0)";
+            case Contants.ORDER_BY_ID:
+                selectQuery += " ORDER BY " + KEY_ITEMNO;
                 break;
-            case ORDER_BY_POS:
-                selectQuery += " ORDER BY " + KEY_COL + ", " + KEY_ROW  + " WHERE (" + KEY_QTY + " > 0)";
+            case Contants.ORDER_BY_POS:
+                selectQuery += " ORDER BY " + KEY_COL + ", " + KEY_ROW;
                 break;
-            case ORDER_BY_QTY:
-                selectQuery += " ORDER BY " + KEY_QTY + " WHERE (" + KEY_QTY + " > 0)";
+            case Contants.ORDER_BY_QTY:
+                selectQuery += " ORDER BY " + KEY_QTY;
                 break;
-            case ORDER_BY_SEASON:
-                selectQuery += "ORDER BY " + KEY_ITEMNO + " WHERE (" + KEY_COL + " == Y ) OR (" + KEY_COL + " == Z)";
+            case Contants.ORDER_BY_SEASON:
+                selectQuery += " ORDER BY " + KEY_ITEMNO + " WHERE (" + KEY_COL + " == Y ) OR (" + KEY_COL + " == Z)";
                 break;
             default: //allid do nothing
-        }*/
+                selectQuery += " ORDER BY " + KEY_QTY;
+        }
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null); //TODO: Problem!!
+        Cursor cursor = db.rawQuery(selectQuery, null);
 
+        DataItem di = null;
         if (cursor.moveToFirst()) {
             do {
-                DataItem di = new DataItem();
+                di = new DataItem();
                 di.setID(cursor.getString(1));
                 di.setVendor(cursor.getString(2));
                 di.setLocation(cursor.getString(3) + cursor.getString(4));
                 di.setQty(cursor.getString(5));
+                listItems.add(di);
             } while (cursor.moveToNext());
+            cursor.close();
         }
         return listItems;
     }
 
-    @Override
     public Cursor getAllItemsCursor(){
         Cursor cursor = getReadableDatabase().query(TABLE_INVENTORY,
                 new String[]{KEY_ID, KEY_ITEMNO, KEY_VENDOR, KEY_ROW, KEY_COL,
@@ -161,16 +158,15 @@ public class DatabaseHandler extends SQLiteOpenHelper implements DataSourceInter
         return cursor;
     }
 
-    @Override
     public int getItemCount() {
         String countQuery = "SELECT * FROM " + TABLE_INVENTORY;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
+        int ct = cursor.getCount();
         cursor.close();
-        return cursor.getCount();
+        return ct;
     }
 
-    @Override
     public int updateItem(DataItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -186,7 +182,6 @@ public class DatabaseHandler extends SQLiteOpenHelper implements DataSourceInter
         //TODO: fix later
     }
 
-    @Override
     public void deleteItem(DataItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_INVENTORY, KEY_ID + " = ?",
@@ -195,7 +190,6 @@ public class DatabaseHandler extends SQLiteOpenHelper implements DataSourceInter
         //TODO: fix later
     }
 
-    @Override
     public void clearDatabase() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_INVENTORY);

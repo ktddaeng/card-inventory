@@ -18,14 +18,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gadau.sqldemo.R;
+import com.example.gadau.sqldemo.data.Contants;
 import com.example.gadau.sqldemo.data.DataItem;
 import com.example.gadau.sqldemo.data.DatabaseHandler;
 
 public class EditInfo extends AppCompatActivity {
-    private static final String EXTRA_ID = "EXTRA_ID";
-    private static final String EXTRA_VENDOR = "EXTRA_VENDOR";
-    private static final String READY_TO_LOAD = "READY_TO_LOAD";
-    private static final String IS_EXISTING = "IS_EXISTING";
     private static final String[] letters = { "A", "B", "C", "D", "E",
             "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P",
             "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
@@ -48,8 +45,8 @@ public class EditInfo extends AppCompatActivity {
 
         //Set Intent Fields
         Intent i = getIntent();
-        String s = i.getExtras().getString(EXTRA_ID);
-        String v = i.getExtras().getString(EXTRA_VENDOR);
+        String s = i.getExtras().getString(Contants.EXTRA_ID);
+        String v = i.getExtras().getString(Contants.EXTRA_VENDOR);
 
         final View idWrapper = (View) findViewById(R.id.input_idWrapper);
         final View vendorWrapper = (View) findViewById(R.id.input_vendorWrapper);
@@ -62,12 +59,12 @@ public class EditInfo extends AppCompatActivity {
 
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        if (getIntent().getExtras().getBoolean(READY_TO_LOAD)){
+        if (getIntent().getExtras().getBoolean(Contants.READY_TO_LOAD)){
             Toast.makeText(this, "Ready to Load", Toast.LENGTH_SHORT).show();
             textID.setText(s);
         }
 
-        if (getIntent().getExtras().getBoolean(IS_EXISTING)){
+        if (getIntent().getExtras().getBoolean(Contants.IS_EXISTING)){
             update_flag = true;
             di = dB.getItemByID(s);
             textVendor.setText(di.getVendor());

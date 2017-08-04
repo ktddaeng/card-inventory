@@ -14,15 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gadau.sqldemo.R;
+import com.example.gadau.sqldemo.data.Contants;
 import com.example.gadau.sqldemo.data.DataItem;
 import com.example.gadau.sqldemo.data.DatabaseHandler;
 
 public class InfoPage extends AppCompatActivity {
-    private static final String EXTRA_ID = "EXTRA_ID";
-    private static final String EXTRA_VENDOR = "EXTRA_VENDOR";
     private static final int WAS_CHANGED = 1;
-    private static final String READY_TO_LOAD = "READY_TO_LOAD";
-    private static final String IS_EXISTING = "IS_EXISTING";
     private DataItem di;
     private String s;
     private boolean isChanged = false;
@@ -40,7 +37,7 @@ public class InfoPage extends AppCompatActivity {
 
         //Take apart package for viewing
         Intent i = getIntent();
-        s = getIntent().getExtras().getString(EXTRA_ID);
+        s = getIntent().getExtras().getString(Contants.EXTRA_ID);
         fillData();
 
     }
@@ -87,10 +84,10 @@ public class InfoPage extends AppCompatActivity {
 
     private void launchEditPage(){
         Intent intent = new Intent(this, EditInfo.class);
-        intent.putExtra(EXTRA_ID, s);
-        intent.putExtra(EXTRA_VENDOR, "");
-        intent.putExtra(READY_TO_LOAD, true);
-        intent.putExtra(IS_EXISTING, true);
+        intent.putExtra(Contants.EXTRA_ID, s);
+        intent.putExtra(Contants.EXTRA_VENDOR, "");
+        intent.putExtra(Contants.READY_TO_LOAD, true);
+        intent.putExtra(Contants.IS_EXISTING, true);
         startActivityForResult(intent, WAS_CHANGED);
     }
 
