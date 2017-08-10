@@ -6,7 +6,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="16dp"
         android:textSize="16sp"
         android:text="@string/dialog_loc"/>
     <LinearLayout
@@ -16,12 +16,18 @@
         <NumberPicker
             android:id="@+id/dialog_picker_col"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="120dp"
+            android:layout_margin="8dp"
+            android:scaleX="1.25"
+            android:scaleY="1.25"
             android:descendantFocusability="blocksDescendants"/>
         <NumberPicker
             android:id="@+id/dialog_picker_row"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="120dp"
+            android:layout_margin="8dp"
+            android:scaleX="1.25"
+            android:scaleY="1.25"
             android:descendantFocusability="blocksDescendants"/>
     </LinearLayout>
 

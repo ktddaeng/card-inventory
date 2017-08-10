@@ -1,8 +1,18 @@
 package com.example.gadau.sqldemo.view;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +34,7 @@ import com.example.gadau.sqldemo.data.DataItem;
 import com.example.gadau.sqldemo.data.DatabaseHandler;
 import com.example.gadau.sqldemo.logic.LineAdapter;
 
+import java.io.FileOutputStream;
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity
@@ -144,7 +155,7 @@ public class ListActivity extends AppCompatActivity
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.options_main_export:
-                Toast.makeText(this, "Export DB!", Toast.LENGTH_SHORT).show();
+                canWriteExportPlease();
                 return true;
             case R.id.options_main_help:
                 Toast.makeText(this, "Pulling help", Toast.LENGTH_SHORT).show();
@@ -191,7 +202,65 @@ public class ListActivity extends AppCompatActivity
 
     /*EXPORT DATABASE*/
     private void exportLog() {
-        Toast.makeText(this, "Exporting Inventory!", Toast.LENGTH_SHORT).show();
+        dB.exportDatabase(order_state);
+
+        /*Sends Notification*/
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_stat_cardinventory)
+                        .setContentTitle("My Notification")
+                        .setContentText("We want to export the database");
+
+        Intent resultIntent = new Intent(this, ListActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(StartPageActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
+                0,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        mNotificationManager.notify(0, mBuilder.build());
+    }
+
+    public void canWriteExportPlease(){
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        Contants.MY_PERMISSIONS_REQUEST);
+
+            }
+        } else {
+            exportLog();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case Contants.MY_PERMISSIONS_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, do your work....
+                    exportLog();
+                } else {
+                    Toast.makeText(this, "Can't write to external storage.", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' statements for other permssions
+        }
     }
 
     /*SORT LIST*/

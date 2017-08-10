@@ -13,14 +13,14 @@ public class DataItem implements Parcelable{
     private String ID;
     private String vendor;
     private String location;
-    private String qty;
+    private int qty;
 
     public DataItem() {
         DBID = 0;
         ID = "";
         vendor = "";
         location = "";
-        qty = "";
+        qty = 0;
     }
 
     public DataItem(String ID, String vendor){
@@ -28,7 +28,7 @@ public class DataItem implements Parcelable{
         this.ID = ID;
         this.vendor = vendor;
         location = "";
-        qty = "";
+        qty = 0;
     }
 
     public DataItem(String ID, String vendor, String loc, String quantity) {
@@ -36,15 +36,11 @@ public class DataItem implements Parcelable{
         this.ID = ID;
         this.vendor = vendor;
         location = loc;
-        qty = quantity;
-    }
-
-    public DataItem(String ID, String loc, String quantity) {
-        DBID = 0;
-        this.ID = ID;
-        this.vendor = "0";
-        location = loc;
-        qty = quantity;
+        if (quantity.equals("6+")){
+            qty = 6;
+        } else {
+            qty = Integer.parseInt(quantity);
+        }
     }
 
     public String getID() {
@@ -58,8 +54,16 @@ public class DataItem implements Parcelable{
 
     public String getCol() { return location.substring(0,1); }
     public String getRow() { return location.substring(1); }
+    public int getRowInt() { return Integer.parseInt(location.substring(1)); }
 
     public String getQty() {
+        if (qty > 5){
+            return qty + "+";
+        } else {
+            return Integer.toString(qty);
+        }
+    }
+    public int getQtyInt(){
         return qty;
     }
 
@@ -74,7 +78,11 @@ public class DataItem implements Parcelable{
     }
 
     public void setQty(String quantity) {
-        qty = quantity;
+        if (quantity.equals("6+")){
+            qty = 6;
+        } else {
+            qty = Integer.parseInt(quantity);
+        }
     }
 
     @Override
@@ -87,7 +95,7 @@ public class DataItem implements Parcelable{
         dest.writeString(ID);
         dest.writeString(vendor);
         dest.writeString(location);
-        dest.writeString(qty);
+        dest.writeString(getQty());
     }
 
     public static final Parcelable.Creator<DataItem> CREATOR = new Parcelable.Creator<DataItem>(){
@@ -103,6 +111,12 @@ public class DataItem implements Parcelable{
         ID = pc.readString();
         vendor = pc.readString();
         location = pc.readString();
-        qty = pc.readString();
+
+        String quantity = pc.readString();
+        if (quantity.equals("6+")){
+            qty = 6;
+        } else {
+            qty = Integer.parseInt(quantity);
+        }
     }
 }
