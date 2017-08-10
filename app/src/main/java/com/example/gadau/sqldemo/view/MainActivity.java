@@ -27,8 +27,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     final Context context = this;
     private DatabaseHandler dB;
 
-    //Preliminary Database; This is NOT stored in memory
-    //private ArrayList<DataItem> dB = new ArrayList<DataItem>();
     private IntentIntegrator qrScan;
 
     @Override
@@ -36,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dB = DatabaseHandler.getInstance(this);
-        //dB.add(new DataItem("12345", "A2", "5")); //dummy item, fix later
         ImageView buttonBack = (ImageView) findViewById(R.id.button_cancel2);
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,11 +83,12 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             s = gottenId.substring(Contants.INDEX_CARD_INIT, Contants.INDEX_CARD_FIN);
         } else if (gottenId.length() == 10) {
             s = gottenId.substring(Contants.INDEX_CARD_INIT - 1, Contants.INDEX_CARD_FIN - 1);
+        } else if (gottenId.length() == 5){
+            s = gottenId;
         } else {
             Toast.makeText(MainActivity.this, "Not a valid ID!", Toast.LENGTH_SHORT).show();
             return;
         }
-        //TODO: For some reason Card IDs that begin with 0 are truncated at the beginning
         DataItem di = dB.getItemByID(s);
 
         if (di != null) {

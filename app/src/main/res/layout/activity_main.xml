@@ -44,7 +44,6 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-    <!--TEST 1: BASIC INPUT AND OUTPUT-->
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

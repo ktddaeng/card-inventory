@@ -61,11 +61,9 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.FragListItem> 
         public TextView itemID;
         public TextView itemLoc;
         public TextView itemQty;
-        private final Context context;
 
         public FragListItem (View itemView){
             super(itemView);
-            context = itemView.getContext();
             itemView.setOnClickListener(this);
             itemID = (TextView) itemView.findViewById(R.id.list_id);
             itemLoc = (TextView) itemView.findViewById(R.id.list_loc);
@@ -76,9 +74,5 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.FragListItem> 
         public void onClick(View v) {
             clickListener.onClick(v, getAdapterPosition());
         }
-    }
-
-    public interface ItemClickListener {
-        void onClick(View view, int position);
     }
 }
