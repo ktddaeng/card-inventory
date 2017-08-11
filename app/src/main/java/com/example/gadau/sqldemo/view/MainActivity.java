@@ -86,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             s = gottenId.substring(Contants.INDEX_CARD_INIT, Contants.INDEX_CARD_FIN);
         } else if (gottenId.length() == 10) {
             s = gottenId.substring(Contants.INDEX_CARD_INIT - 1, Contants.INDEX_CARD_FIN - 1);
+        } else if (gottenId.length() == 5) {
+            s = gottenId;
         } else {
             Toast.makeText(MainActivity.this, "Not a valid ID!", Toast.LENGTH_SHORT).show();
             return;
