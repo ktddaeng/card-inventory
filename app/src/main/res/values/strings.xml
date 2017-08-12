@@ -14,6 +14,7 @@
     <string name="hint_vendor">Enter Vendor ID</string>
     <string name="hint_loc">A1</string>
     <string name="hint_qty">Enter Quantity</string>
+    <string name="dialog_id">Please enter the full id or the last 5 digits.</string>
     <string name="dialog_loc">Note: For seasonal items, label items as Y (Valentines) or Z (Christmas).</string>
     <string name="dialog_qty">Note: If 6 or over, please indicate quantity as 6+.</string>
     <string name="label_ID">Item ID</string>

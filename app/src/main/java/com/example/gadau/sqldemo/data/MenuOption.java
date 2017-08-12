@@ -11,20 +11,16 @@ public class MenuOption{
     private int header;
     private int desc;
     private int color;
-    private Intent intent;
-    public MenuOption(int h, int d, int c, Intent i) {
+    public MenuOption(int h, int d, int c) {
         header = h;
         desc = d;
         color = c;
-        intent = i;
     }
 
     public int getHeader() { return header; }
     public int getDesc() { return desc; }
     public int getColor() { return color; }
-    public Intent getIntent() {return intent; }
     public void setHeader(int header) { this.header = header; }
     public void setDesc(int desc) { this.desc = desc; }
     public void setColor(int color) {this.color = color; }
-    public void setIntent(Intent i) { intent = i; }
 }

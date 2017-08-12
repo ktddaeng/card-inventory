@@ -33,13 +33,10 @@ public class StartPageActivity extends AppCompatActivity implements ItemClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_page);
 
-        //Button scanButton = (Button) findViewById(R.id.button_scan);
-        //Button listButton = (Button) findViewById(R.id.button_list);
-
         /**Prepare List**/
         listOfData = new ArrayList<>();
-        listOfData.add(new MenuOption(R.string.header1, R.string.desc1, R.color.colorAccent , new Intent(this, MainActivity.class)));
-        listOfData.add(new MenuOption(R.string.header2, R.string.desc2, R.color.colorPrimary , new Intent(this, ListActivity.class)));
+        listOfData.add(new MenuOption(R.string.header1, R.string.desc1, R.color.colorAccent));
+        listOfData.add(new MenuOption(R.string.header2, R.string.desc2, R.color.colorPrimary));
 
         setUpToolbar();
         setUpRecycler();
@@ -59,21 +56,29 @@ public class StartPageActivity extends AppCompatActivity implements ItemClickLis
 
         mAdapter = new StartAdapter(listOfData);
         mRecycleView.setAdapter(mAdapter);
+        mAdapter.setClickListener(this);
     }
 
-    private void launchSearchView(){
+    public void launchSearchView(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
-    private void launchListView(){
+    public void launchListView(){
         Intent intent = new Intent(this, ListActivity.class);
         startActivity(intent);
     }
 
     @Override
     public void onClick(View view, int position) {
-        Toast.makeText(this, "Item " + position + " Selected", Toast.LENGTH_SHORT).show();
-        /**/
+        final MenuOption data = listOfData.get(position);
+        switch (data.getHeader()) {
+            case R.string.header1:
+                launchSearchView();
+                break;
+            case R.string.header2:
+                launchListView();
+                break;
+        }
     }
 }

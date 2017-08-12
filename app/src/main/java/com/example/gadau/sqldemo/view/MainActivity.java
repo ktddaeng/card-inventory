@@ -1,31 +1,51 @@
 package com.example.gadau.sqldemo.view;
 
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gadau.sqldemo.R;
 import com.example.gadau.sqldemo.data.Contants;
 import com.example.gadau.sqldemo.data.DataItem;
 import com.example.gadau.sqldemo.data.DatabaseHandler;
+import com.example.gadau.sqldemo.data.MenuOption;
 import com.example.gadau.sqldemo.logic.AnyOrientationActivity;
+import com.example.gadau.sqldemo.logic.ItemClickListener;
+import com.example.gadau.sqldemo.logic.StartAdapter;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, ItemClickListener {
     final Context context = this;
     private DatabaseHandler dB;
+    private RecyclerView mRecycleView;
+    private StartAdapter mAdapter;
+    private List<MenuOption> listOfData;
 
     private IntentIntegrator qrScan;
 
@@ -42,43 +62,75 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             }
         });
 
-        Button button = (Button) findViewById(R.id.submit_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                EditText inID = (EditText) findViewById(R.id.input_barcode);
-                identifyID(inID.getText().toString());
-            }
-        });
-        Button barScan = (Button) findViewById(R.id.barcode_button);
-        barScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                barcodeMode();
-            }
-        });
-        Button manualButton = (Button) findViewById(R.id.manual_button);
-        manualButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goEditData(",", false);
-            }
-        });
-        final EditText et = (EditText) findViewById(R.id.input_barcode);
-        et.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                et.setText("");
-            }
-        });
+        listOfData = new ArrayList<>();
+        listOfData.add(new MenuOption(R.string.header3, R.string.desc3, R.color.colorAccent));
+        listOfData.add(new MenuOption(R.string.header4, R.string.desc4, R.color.colorPrimary));
+        listOfData.add(new MenuOption(R.string.header5, R.string.desc5, R.color.colorAccent));
 
+        setUpRecycler();
         if (savedInstanceState != null){
             finish();
         }
     }
 
+    private void setUpRecycler() {
+        mRecycleView = (RecyclerView) findViewById(R.id.rec_main);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecycleView.setLayoutManager(layoutManager);
+
+        mAdapter = new StartAdapter(listOfData);
+        mRecycleView.setAdapter(mAdapter);
+        mAdapter.setClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        final MenuOption data = listOfData.get(position);
+        switch (data.getHeader()) {
+            case R.string.header3:
+                inputNumberSearch();
+                break;
+            case R.string.header4:
+                barcodeMode();
+                break;
+            case R.string.header5:  //Manual
+                goEditData(",", false);
+                break;
+        }
+    }
+
+    private void inputNumberSearch(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Choose Quantity");
+        View subView = getLayoutInflater().inflate(R.layout.fragment_edit_id, null);
+        final EditText inID = (EditText) subView.findViewById(R.id.input_dialog_IDNo);
+        builder.setView(subView);
+        inID.requestFocus();
+
+        builder
+                .setCancelable(true)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        identifyID(inID.getText().toString());
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Toast.makeText(MainActivity.this, "Action Canceled", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dialog.show();
+    }
+
     //Figure out if the item exists on database
     private void identifyID(String gottenId){
-        String s = gottenId;    //goes by 5 last char by default
+        String s;    //goes by 5 last char by default
         if (gottenId.length() == 12){
             s = gottenId.substring(Contants.INDEX_CARD_INIT, Contants.INDEX_CARD_FIN);
         } else if (gottenId.length() == 10) {
@@ -127,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.options_main_export:
-                Toast.makeText(context, "Export DB!", Toast.LENGTH_SHORT).show();
+                canWriteExportPlease();
                 return true;
             case R.id.options_main_help:
                 Toast.makeText(context, "Pulling help", Toast.LENGTH_SHORT).show();
@@ -192,13 +244,15 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             return;
         }
         String s = id;
-        String v = id;
+        String v;
         if (id.length() == 12){
             s = id.substring(Contants.INDEX_CARD_INIT, Contants.INDEX_CARD_FIN);
             v = id.substring(Contants.INDEX_VENDOR_INIT, Contants.INDEX_VENDOR_FIN);
         } else if (id.length() == 10) {
             s = id.substring(Contants.INDEX_CARD_INIT - 1, Contants.INDEX_CARD_FIN - 1);
             v = id.substring(Contants.INDEX_VENDOR_INIT - 1, Contants.INDEX_VENDOR_FIN - 1);
+        } else if (id.length() == 5 ){
+            v = "77054";
         } else {
             Toast.makeText(MainActivity.this, "ID Not Valid!", Toast.LENGTH_SHORT);
             return;
@@ -210,16 +264,27 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         startActivity(intent);
     }
 
-    //Gives index of item in DB
-    //TODO: Put in SQLite
-    private int getDBindex(String id) {
-        int i = -1;
-        /*for (DataItem d : dB){
-            if(d.getID().equals(id)){
-                //i =  dB.indexOf(d);
+    private void exportLog() {
+        dB.exportDatabase(Contants.ORDER_BY_ID);
+        Toast.makeText(this, "Database successfully exported!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void canWriteExportPlease(){
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        Contants.MY_PERMISSIONS_REQUEST);
+
             }
-        }*/
-        return i;
+        } else {
+            exportLog();
+        }
     }
 
     private void onPurge() {

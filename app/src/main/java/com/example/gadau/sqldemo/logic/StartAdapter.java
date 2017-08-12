@@ -5,13 +5,18 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gadau.sqldemo.R;
 import com.example.gadau.sqldemo.data.MenuOption;
+import com.example.gadau.sqldemo.view.ListActivity;
+import com.example.gadau.sqldemo.view.MainActivity;
+import com.example.gadau.sqldemo.view.StartPageActivity;
 
 import java.util.List;
 
@@ -22,6 +27,7 @@ import java.util.List;
 public class StartAdapter extends RecyclerView.Adapter<StartAdapter.StartOptionItem> {
     private final List<MenuOption> listOfData;
     private Context mContext;
+    private ItemClickListener clickListener;
 
     public StartAdapter(List<MenuOption> list) {
         listOfData = list;
@@ -40,14 +46,6 @@ public class StartAdapter extends RecyclerView.Adapter<StartAdapter.StartOptionI
         holder.iHeader.setText(listOfData.get(position).getHeader());
         holder.iDesc.setText(listOfData.get(position).getDesc());
         holder.iBackground.setBackgroundResource(listOfData.get(position).getColor());
-        holder.iCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final MenuOption data = listOfData.get(pos);
-                Intent intent = data.getIntent();
-                mContext.startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -55,7 +53,11 @@ public class StartAdapter extends RecyclerView.Adapter<StartAdapter.StartOptionI
         return listOfData != null ? listOfData.size() : 0;
     }
 
-    public class StartOptionItem extends RecyclerView.ViewHolder {
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.clickListener = itemClickListener;
+    }
+
+    public class StartOptionItem extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView iHeader;
         public TextView iDesc;
         public CardView iCard;
@@ -63,10 +65,17 @@ public class StartAdapter extends RecyclerView.Adapter<StartAdapter.StartOptionI
 
         public StartOptionItem(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             iHeader = (TextView) itemView.findViewById(R.id.start_header);
             iDesc = (TextView) itemView.findViewById(R.id.start_desc);
-            iCard = (CardView) itemView.findViewById(R.id.start_card);
             iBackground = itemView.findViewById(R.id.start_view);
+            iCard = (CardView) itemView.findViewById(R.id.root_start_option);
+        }
+
+        @Override
+        public void onClick(View v) {
+            clickListener.onClick(v, getAdapterPosition());
+            Log.i("WHAT IS THIS: ", "!!");
         }
     }
 }
