@@ -1,17 +1,11 @@
 package com.example.gadau.sqldemo.view;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -32,14 +26,14 @@ import com.example.gadau.sqldemo.R;
 import com.example.gadau.sqldemo.data.Contants;
 import com.example.gadau.sqldemo.data.DataItem;
 import com.example.gadau.sqldemo.data.DatabaseHandler;
+import com.example.gadau.sqldemo.logic.ItemClickListener;
 import com.example.gadau.sqldemo.logic.LineAdapter;
 
-import java.io.FileOutputStream;
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity
         implements PopupMenu.OnMenuItemClickListener,
-        LineAdapter.ItemClickListener{
+        ItemClickListener {
     private static final String EXTRA_ID = "EXTRA_ID";
     private static final String READY_TO_LOAD = "READY_TO_LOAD";
     private static final String IS_EXISTING = "IS_EXISTING";
@@ -203,8 +197,10 @@ public class ListActivity extends AppCompatActivity
     /*EXPORT DATABASE*/
     private void exportLog() {
         dB.exportDatabase(order_state);
+        Toast.makeText(this, "Table has been exported!", Toast.LENGTH_SHORT).show();
 
         /*Sends Notification*/
+        /*
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_stat_cardinventory)
@@ -224,6 +220,7 @@ public class ListActivity extends AppCompatActivity
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         mNotificationManager.notify(0, mBuilder.build());
+    */
     }
 
     public void canWriteExportPlease(){

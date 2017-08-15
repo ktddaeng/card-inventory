@@ -14,6 +14,7 @@
     <string name="hint_vendor">Enter Vendor ID</string>
     <string name="hint_loc">A1</string>
     <string name="hint_qty">Enter Quantity</string>
+    <string name="dialog_id">Please enter the full id or the last 5 digits.</string>
     <string name="dialog_loc">Note: For seasonal items, label items as Y (Valentines) or Z (Christmas).</string>
     <string name="dialog_qty">Note: If 6 or over, please indicate quantity as 6+.</string>
     <string name="label_ID">Item ID</string>
@@ -43,4 +44,16 @@
         <item>Item Number</item>
         <item>Location</item>
     </string-array>
+
+    <!--Headers for Star Page Cards-->
+    <string name="header1">Search &amp; Scan</string>
+    <string name="header2">List Inventory</string>
+    <string name="header3">Search by ID</string>
+    <string name="header4">Search by Barcode</string>
+    <string name="header5">Manually Add an Item</string>
+    <string name="desc1">Search the inventory for saved items using the item\'s barcode or add new items.</string>
+    <string name="desc2">View a list of saved items and sort items according to various categories.</string>
+    <string name="desc3">Find item by ID using keyboard input.</string>
+    <string name="desc4">Use the built-in barcode scanner to identify or add new items.</string>
+    <string name="desc5">For special barcodes that cannot be added by the barcode scanner.</string>
 </resources>
