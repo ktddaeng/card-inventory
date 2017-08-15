@@ -46,9 +46,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private RecyclerView mRecycleView;
     private StartAdapter mAdapter;
     private List<MenuOption> listOfData;
-
-    //Preliminary Database; This is NOT stored in memory
-    //private ArrayList<DataItem> dB = new ArrayList<DataItem>();
     private IntentIntegrator qrScan;
 
     @Override
