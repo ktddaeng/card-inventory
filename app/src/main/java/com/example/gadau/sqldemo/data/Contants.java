@@ -23,8 +23,6 @@ public class Contants {
     public static final int INDEX_CARD_INIT = 6;
     public static final int INDEX_CARD_FIN = 11;
 
-    public static final int STYLE_PICKER_SIZE = 18;
-
     //DATABASE VERSION
     public static final int DATABASE_VERSION = 1;
 

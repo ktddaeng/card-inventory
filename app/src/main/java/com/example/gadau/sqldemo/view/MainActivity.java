@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     private void inputNumberSearch(){
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("Choose Quantity");
+        builder.setTitle("Input ID Number");
         View subView = getLayoutInflater().inflate(R.layout.fragment_edit_id, null);
         final EditText inID = (EditText) subView.findViewById(R.id.input_dialog_IDNo);
         builder.setView(subView);

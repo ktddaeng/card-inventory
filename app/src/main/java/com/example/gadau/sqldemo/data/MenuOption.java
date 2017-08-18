@@ -1,8 +1,5 @@
 package com.example.gadau.sqldemo.data;
 
-import android.content.Context;
-import android.content.Intent;
-
 /**
  * Created by gadau on 8/10/2017.
  */
