@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
         listOfData = new ArrayList<>();
         listOfData.add(new MenuOption(R.string.header3, R.string.desc3, R.color.colorAccent));
-        listOfData.add(new MenuOption(R.string.header4, R.string.desc4, R.color.colorPrimary));
-        listOfData.add(new MenuOption(R.string.header5, R.string.desc5, R.color.colorAccent));
+        listOfData.add(new MenuOption(R.string.header4, R.string.desc4, R.color.colorAccent1));
+        listOfData.add(new MenuOption(R.string.header5, R.string.desc5, R.color.colorAccent2));
 
         setUpRecycler();
         if (savedInstanceState != null){

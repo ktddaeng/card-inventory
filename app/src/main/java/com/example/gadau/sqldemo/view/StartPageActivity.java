@@ -35,8 +35,8 @@ public class StartPageActivity extends AppCompatActivity implements ItemClickLis
 
         /**Prepare List**/
         listOfData = new ArrayList<>();
-        listOfData.add(new MenuOption(R.string.header1, R.string.desc1, R.color.colorAccent));
-        listOfData.add(new MenuOption(R.string.header2, R.string.desc2, R.color.colorPrimary));
+        listOfData.add(new MenuOption(R.string.header1, R.string.desc1, R.color.colorPrimary1));
+        listOfData.add(new MenuOption(R.string.header2, R.string.desc2, R.color.colorPrimary2));
 
         setUpToolbar();
         setUpRecycler();
