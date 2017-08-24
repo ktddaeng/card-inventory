@@ -40,6 +40,7 @@
     <string name="context_sort_title">Sort List by</string>
     <string-array
         name="context_list">
+        <item>Quantity, ID</item>
         <item>Quantity</item>
         <item>Item Number</item>
         <item>Location</item>

@@ -137,6 +137,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             case Contants.ORDER_BY_SEASON:
                 selectQuery += " ORDER BY " + KEY_ITEMNO + " WHERE (" + KEY_COL + " == Y ) OR (" + KEY_COL + " == Z)";
                 break;
+            case Contants.ORDER_BY_QTY_ID:
+                selectQuery += " ORDER BY " + KEY_QTY + ", " + KEY_ITEMNO;
+                break;
             default: //allid do nothing
                 selectQuery += " ORDER BY " + KEY_QTY;
         }

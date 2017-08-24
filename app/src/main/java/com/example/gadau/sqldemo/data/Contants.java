@@ -9,6 +9,7 @@ public class Contants {
     public static final int ORDER_BY_POS = 12;
     public static final int ORDER_BY_QTY = 13;
     public static final int ORDER_BY_SEASON = 14;
+    public static final int ORDER_BY_QTY_ID = 15;
     public static final int ORDER_NONE = 0;
 
     public static final String EXTRA_ID = "EXTRA_ID";

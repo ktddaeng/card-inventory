@@ -269,6 +269,7 @@ public class ListActivity extends AppCompatActivity
                 .setItems(R.array.context_list, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        //Toast.makeText(ListActivity.this, "item: " + which, Toast.LENGTH_SHORT).show();
                         contextChoice(which);
                     }
                 });
@@ -276,22 +277,29 @@ public class ListActivity extends AppCompatActivity
         alertDialog.show();
     }
 
-    public boolean contextChoice(int item) {
+    public boolean
+    contextChoice(int item) {
         switch (item) {
+            case 0:
+                Toast.makeText(this, "Ordered by Quantity, ID", Toast.LENGTH_SHORT).show();
+                order_state = Contants.ORDER_BY_QTY_ID;
+                refreshPage(order_state);
+                return true;
             case 1:
-                Toast.makeText(this, "order by id", Toast.LENGTH_SHORT).show();
-                order_state = Contants.ORDER_BY_ID;
+                Toast.makeText(this, "Ordered by Quantity", Toast.LENGTH_SHORT).show();
+                order_state = Contants.ORDER_BY_QTY;
                 refreshPage(order_state);
                 return true;
             case 2:
-                Toast.makeText(this, "order by pos", Toast.LENGTH_SHORT).show();
-                order_state = Contants.ORDER_BY_POS;
+                Toast.makeText(this, "Order by ID", Toast.LENGTH_SHORT).show();
+                order_state = Contants.ORDER_BY_ID;
                 refreshPage(order_state);
                 return true;
             case 3:
-                Toast.makeText(this, "order by qty", Toast.LENGTH_SHORT).show();
-                order_state = Contants.ORDER_BY_QTY;
+                Toast.makeText(this, "Ordered by Position", Toast.LENGTH_SHORT).show();
+                order_state = Contants.ORDER_BY_POS;
                 refreshPage(order_state);
+                return true;
             default:
                 return true;
         }

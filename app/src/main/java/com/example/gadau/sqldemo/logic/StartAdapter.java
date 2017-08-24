@@ -75,7 +75,6 @@ public class StartAdapter extends RecyclerView.Adapter<StartAdapter.StartOptionI
         @Override
         public void onClick(View v) {
             clickListener.onClick(v, getAdapterPosition());
-            Log.i("WHAT IS THIS: ", "!!");
         }
     }
 }

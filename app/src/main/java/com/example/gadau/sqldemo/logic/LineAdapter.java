@@ -40,7 +40,6 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.FragListItem> 
         holder.itemQty.setText(inventory.get(position).getQty());
     }
 
-    //TODO: Enable Edit Info Page to be opened on item click
     @Override
     public int getItemCount() {
         return inventory != null ? inventory.size() : 0;
