@@ -121,30 +121,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public List<DataItem> getListofData(int order) {
         List<DataItem> listItems = new ArrayList<>();
-        boolean excludeZeros = true; //TODO: DUmmy value, allow for customizing in parameters
-        String selectQuery = "SELECT * FROM " + Contants.TABLE_INVENTORY ;// + " ORDER BY " + KEY_QTY;
-
-        switch (order){
-            case Contants.ORDER_BY_ID:
-                selectQuery += " ORDER BY " + KEY_ITEMNO;
-                break;
-            case Contants.ORDER_BY_POS:
-                selectQuery += " ORDER BY " + KEY_COL + ", " + KEY_ROW;
-                break;
-            case Contants.ORDER_BY_QTY:
-                selectQuery += " ORDER BY " + KEY_QTY;
-                break;
-            case Contants.ORDER_BY_SEASON:
-                selectQuery += " ORDER BY " + KEY_ITEMNO + " WHERE (" + KEY_COL + " == Y ) OR (" + KEY_COL + " == Z)";
-                break;
-            case Contants.ORDER_BY_QTY_ID:
-                selectQuery += " ORDER BY " + KEY_QTY + ", " + KEY_ITEMNO;
-                break;
-            default: //allid do nothing
-                selectQuery += " ORDER BY " + KEY_QTY;
-        }
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        Cursor cursor = getAllItemsCursor(order);
 
         DataItem di = null;
         if (cursor.moveToFirst()) {
@@ -176,6 +153,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 break;
             case Contants.ORDER_BY_SEASON:
                 selectQuery += " ORDER BY " + KEY_ITEMNO + " WHERE (" + KEY_COL + " == Y ) OR (" + KEY_COL + " == Z)";
+                break;
+            case Contants.ORDER_BY_QTY_ID:
+                selectQuery += " ORDER BY " + KEY_QTY + ", " + KEY_ITEMNO;
                 break;
             default: //allid do nothing
                 selectQuery += " ORDER BY " + KEY_QTY;
@@ -261,11 +241,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        //TODO: Allow backup capabilities
-        //* Establish path to save log files
-        //* Convert DB to CSV files
-        //* Label CSV files by date and time
     }
 }
 /*

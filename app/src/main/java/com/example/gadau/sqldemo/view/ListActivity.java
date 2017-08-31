@@ -49,7 +49,7 @@ public class ListActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        order_state = Contants.ORDER_NONE;
+        order_state = Contants.ORDER_BY_QTY_ID;
         setContentView(R.layout.activity_list);
         setUpToolbar();
 
@@ -277,8 +277,7 @@ public class ListActivity extends AppCompatActivity
         alertDialog.show();
     }
 
-    public boolean
-    contextChoice(int item) {
+    public boolean contextChoice(int item) {
         switch (item) {
             case 0:
                 Toast.makeText(this, "Ordered by Quantity, ID", Toast.LENGTH_SHORT).show();
