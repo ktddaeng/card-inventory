@@ -11,7 +11,7 @@ This app was made as a management tool for a local gift shop selling greeting ca
 
 Another reason for this app was, of course, to keep track of item quantities. The store manager would often have to memorize which kinds of cards are in low quantities and may run into the error of stocking the wrong cards. Listing the item quanitities and exporting the sorted lists into a CSV file will make it easier for the store manager to know which kinds cards they should restock on.
 ## What's New
-* Under Construction
+* New Info Page Layout: To differentiate from the Edit Page
 
 ## Prerequisites
 * Android SDK 25 (Minimum SDK 19)
@@ -24,9 +24,9 @@ This project can be build using the "gradle build" feature in Android Studio.
 ### Scanning Items
 After selecting Search & Scan in the main menu, you can choose to enter in a barcode manually, or scan the item using your camera. This app uses the [ZXing Barcode Scanning Library](https://github.com/zxing/zxing). If the app doesn't recognize the inputted barcode, it will ask you to enter information for a new item. If the item does exist in the database, the app wil pull up a simple information page. From there, you can choose to edit the item information or delete the item itself.
 
-|Search & Scan|Manual Input|File Information|
+|Search & Scan|Manual Input|Item Information|
 |---|---|---|
-|<img src="/screenshots/Screenshot_20170818-173006.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170818-173418.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170818-173056.png" width="250px" height="auto">|
+|<img src="/screenshots/Screenshot_20170818-173006.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170818-173418.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170831-133441.png" width="250px" height="auto">|
 
 ### List Inventory
 This brings up a list of all items in your card database. By selecting the sort button in the toolbar, you can sort and filter the list to the way you desire. You can view individual item information from the list view by clicking on the list items.
