@@ -1,5 +1,4 @@
 # Card Inventory App
-## About the App
 Card Inventory is an Android app that organizes and maintains a database of a collection of greeting cards. Items can be added into a database by manual input or by a barcode scanner to fetch a record of the item's location in the store aisle or create a new item if the item does not yet exist in the database. All items can be listed and sorted according to the user's preferences, and said list can be exported to a CSV file in the sd card of the Android device.
 
 |Main Menu|Editing View|List View|
