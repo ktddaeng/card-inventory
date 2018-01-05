@@ -9,6 +9,7 @@
     <string name="str_button_export">Export</string>
     <string name="str_button_help">Help</string>
     <string name="str_button_list">List</string>
+    <string name="str_button_import">Import</string>
 
     <string name="hint_ID">Enter Item ID</string>
     <string name="hint_vendor">Enter Vendor ID</string>
@@ -16,7 +17,7 @@
     <string name="hint_qty">Enter Quantity</string>
     <string name="dialog_id">Please enter the full id or the last 5 digits.</string>
     <string name="dialog_loc">Note: For seasonal items, label items as Y (Valentines) or Z (Christmas).</string>
-    <string name="dialog_qty">Note: If 6 or over, please indicate quantity as 6+.</string>
+    <string name="dialog_qty">Note: If 12 or over, please indicate quantity as 12.</string>
     <string name="label_ID">Item ID</string>
     <string name="label_vendor">Vendor ID</string>
     <string name="label_loc">Location</string>
@@ -44,6 +45,7 @@
         <item>Item Number</item>
         <item>Location</item>
     </string-array>
+    <string name="progress_msg">Syncing in progress...</string>
 
     <!--Headers for Star Page Cards-->
     <string name="header1">Search &amp; Scan</string>

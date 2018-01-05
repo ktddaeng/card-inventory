@@ -26,7 +26,6 @@ public class EditInfo extends AppCompatActivity {
     private static final String[] letters = { "A", "B", "C", "D", "E",
             "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P",
             "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-    private static final String[] qnums = {"0", "1", "2", "3", "4", "5", "6+"};
     private DataItem di;
     private boolean update_flag = false;
     private DatabaseHandler dB;
@@ -218,17 +217,11 @@ public class EditInfo extends AppCompatActivity {
         View subView = getLayoutInflater().inflate(R.layout.fragment_edit_qty, null);
         final TextView qtyWrapper = (TextView) findViewById(R.id.input_dialog_qty);
         int col = 0;
-        for (int i=0;i<qnums.length;i++) {
-            if (qnums[i].equals(String.valueOf( qtyWrapper.getText().toString()))) {
-                col = i;
-                break;
-            }
-        }
+
         final NumberPicker qtyPicker = (NumberPicker) subView.findViewById(R.id.dialog_picker_qty);
-        qtyPicker.setMaxValue(6);
+        qtyPicker.setMaxValue(12);
         qtyPicker.setMinValue(0);
         qtyPicker.setValue(col);
-        qtyPicker.setDisplayedValues(qnums);
         qtyPicker.setWrapSelectorWheel(false);
         builder.setView(subView);
 
@@ -237,8 +230,7 @@ public class EditInfo extends AppCompatActivity {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String s = (qnums[(qtyPicker.getValue())]);
-                        qtyWrapper.setText(s);
+                        qtyWrapper.setText(Integer.toString(qtyPicker.getValue()));
                         dialog.dismiss();
                     }
                 })
@@ -258,6 +250,7 @@ public class EditInfo extends AppCompatActivity {
             Toast.makeText(this, "Action Invalid. Please fill in all fields.", Toast.LENGTH_SHORT).show();
             return;
         }
+        //System.out.println("id: " + id + ", vendor: " + vendor + ", loc" + loc + ", qty: " + qty);
         di.setID(id);
         di.setVendor(vendor);
         di.setLocation(loc);

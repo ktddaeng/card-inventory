@@ -2,6 +2,7 @@ package com.example.gadau.sqldemo.view;
 
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private StartAdapter mAdapter;
     private List<MenuOption> listOfData;
     private IntentIntegrator qrScan;
+    private AlertDialog progressDialog;
+    private AlertDialog.Builder progressBuild;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,6 +189,9 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             case R.id.options_main_purge:
                 onPurge();
                 return true;
+            case R.id.options_main_import:
+                canImportPlease();
+                return true;
             default:
                 return false;
         }
@@ -314,5 +320,57 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private void clearDatabase(){
         dB.clearDatabase();
         Toast.makeText(this, "Database has been cleared!", Toast.LENGTH_SHORT);
+    }
+
+    private void importData(){
+        //Toast.makeText(context, "attempting import", Toast.LENGTH_SHORT).show();
+        new importHandler().execute();
+    }
+
+    private class importHandler extends AsyncTask<Void, Void, Void> {
+        DatabaseHandler db = DatabaseHandler.getInstance(MainActivity.this);
+        private String s;
+
+        @Override
+        protected void onPreExecute() {
+            progressBuild = new AlertDialog.Builder(MainActivity.this);
+            View dialogView = getLayoutInflater().inflate(R.layout.fragment_progress, null);
+            progressBuild.setView(dialogView)
+                    .setCancelable(false);
+            progressDialog = progressBuild.create();
+            progressDialog.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            s = db.importDatabase();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressDialog.dismiss();
+            Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void canImportPlease(){
+        //Toast.makeText(context, "asking for permission...", Toast.LENGTH_SHORT).show();
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        Contants.MY_PERMISSIONS_REQUEST);
+            }
+        } else {
+            importData();
+        }
     }
 }

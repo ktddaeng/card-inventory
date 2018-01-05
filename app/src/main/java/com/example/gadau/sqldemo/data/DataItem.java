@@ -55,12 +55,9 @@ public class DataItem implements Parcelable{
     public int getRowInt() { return Integer.parseInt(location.substring(1)); }
 
     public String getQty() {
-        if (qty > 5){
-            return qty + "+";
-        } else {
-            return Integer.toString(qty);
-        }
+        return Integer.toString(qty);
     }
+
     public int getQtyInt(){
         return qty;
     }

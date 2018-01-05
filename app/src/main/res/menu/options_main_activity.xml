@@ -4,6 +4,9 @@
         android:id="@+id/options_main_purge"
         android:title="@string/str_button_purge"/>
     <item
+        android:id="@+id/options_main_import"
+        android:title="@string/str_button_import"/>
+    <item
         android:id="@+id/options_main_export"
         android:title="@string/str_button_export"/>
     <item

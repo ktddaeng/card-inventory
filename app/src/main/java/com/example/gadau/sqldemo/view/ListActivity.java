@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -45,6 +46,8 @@ public class ListActivity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private LineAdapter mAdapter;
     private int order_state;
+    private AlertDialog progressDialog;
+    private AlertDialog.Builder progressBuild;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +160,9 @@ public class ListActivity extends AppCompatActivity
             case R.id.options_main_purge:
                 onPurge();
                 return true;
+            case R.id.options_main_import:
+                canImportPlease();
+                return true;
             default:
                 return false;
         }
@@ -198,29 +204,6 @@ public class ListActivity extends AppCompatActivity
     private void exportLog() {
         dB.exportDatabase(order_state);
         Toast.makeText(this, "Table has been exported!", Toast.LENGTH_SHORT).show();
-
-        /*Sends Notification*/
-        /*
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_stat_cardinventory)
-                        .setContentTitle("My Notification")
-                        .setContentText("We want to export the database");
-
-        Intent resultIntent = new Intent(this, ListActivity.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(StartPageActivity.class);
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
-                0,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        );
-        mBuilder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        mNotificationManager.notify(0, mBuilder.build());
-    */
     }
 
     public void canWriteExportPlease(){
@@ -257,6 +240,58 @@ public class ListActivity extends AppCompatActivity
             }
 
             // other 'case' statements for other permssions
+        }
+    }
+
+    private void importData(){
+        //Toast.makeText(context, "attempting import", Toast.LENGTH_SHORT).show();
+        new importHandler().execute();
+    }
+
+    private class importHandler extends AsyncTask<Void, Void, Void> {
+        DatabaseHandler db = DatabaseHandler.getInstance(ListActivity.this);
+        private String s;
+
+        @Override
+        protected void onPreExecute() {
+            progressBuild = new AlertDialog.Builder(ListActivity.this);
+            View dialogView = getLayoutInflater().inflate(R.layout.fragment_progress, null);
+            progressBuild.setView(dialogView)
+                    .setCancelable(false);
+            progressDialog = progressBuild.create();
+            progressDialog.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            s = db.importDatabase();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressDialog.dismiss();
+            Toast.makeText(ListActivity.this, s, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void canImportPlease(){
+        //Toast.makeText(context, "asking for permission...", Toast.LENGTH_SHORT).show();
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        Contants.MY_PERMISSIONS_REQUEST);
+            }
+        } else {
+            importData();
         }
     }
 

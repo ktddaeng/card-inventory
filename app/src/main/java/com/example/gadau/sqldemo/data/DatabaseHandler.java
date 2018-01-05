@@ -11,16 +11,21 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -76,12 +81,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void addItem(DataItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
 
+        //System.out.println("id: " + item.getID() + ", vendor: " + item.getVendor() + ", loc" + item.getCol() + item.getRowInt() + ", qty: " + item.getQty() + " ~~~");
         ContentValues values = new ContentValues();
         values.put(KEY_ITEMNO, item.getID());
         values.put(KEY_VENDOR, item.getVendor());
         values.put(KEY_COL, item.getCol());
         values.put(KEY_ROW, item.getRowInt());
-        values.put(KEY_QTY, item.getQtyInt());
+        values.put(KEY_QTY, item.getQty());
 
         db.insert(Contants.TABLE_INVENTORY, KEY_ITEMNO, values);
         db.close();
@@ -198,6 +204,55 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + Contants.TABLE_INVENTORY);
         onCreate(db);
+    }
+
+    public String importDatabase() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db.beginTransaction();
+            clearDatabase();
+            String source = "";
+            boolean found = false;
+
+            final File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File[] files = dir.listFiles();
+            Arrays.sort(files, Collections.reverseOrder());
+            for (File file : files) {
+                if (file.getName().startsWith("CardInventory_")) {
+                    Log.i("DBHandler", file.getName());
+                    found = true;
+                    source = file.getAbsolutePath();
+                    break;
+                }
+            }
+
+            if (!found){
+                return "Could not find a CardInventory file";
+            }
+
+            String line;
+            BufferedReader br = new BufferedReader(new FileReader(source));
+            br.readLine();
+            while ((line = br.readLine()) != null){
+                String[] col = line.split(",");
+                System.out.println(line);
+                ContentValues values = new ContentValues();
+                values.put(KEY_ITEMNO, col[1].trim());
+                values.put(KEY_VENDOR, col[2].trim());
+                values.put(KEY_COL, col[3].trim());
+                values.put(KEY_ROW, col[4].trim());
+                values.put(KEY_QTY, col[5].trim());
+
+                db.insertOrThrow(Contants.TABLE_INVENTORY, KEY_ITEMNO, values);
+            }
+            db.setTransactionSuccessful();
+            br.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
+        return "Data Sync Successful";
     }
 
     public void exportDatabase(int order) {
