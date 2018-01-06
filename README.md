@@ -10,7 +10,8 @@ This app was made as a management tool for a local gift shop selling greeting ca
 
 Another reason for this app was, of course, to keep track of item quantities. The store manager would often have to memorize which kinds of cards are in low quantities and may run into the error of stocking the wrong cards. Listing the item quanitities and exporting the sorted lists into a CSV file will make it easier for the store manager to know which kinds cards they should restock on.
 ## What's New
-* New Info Page Layout: To differentiate from the Edit Page
+* Exported CSV files can be importaed back in
+* Quantity count increased to 12
 
 ## Prerequisites
 * Android SDK 25 (Minimum SDK 19)
