@@ -133,11 +133,9 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     //Figure out if the item exists on database
     private void identifyID(String gottenId){
         String s;    //goes by 5 last char by default
-        if (gottenId.length() == 12){
+        if (gottenId.length() == 12) {
             s = gottenId.substring(Contants.INDEX_CARD_INIT, Contants.INDEX_CARD_FIN);
-        } else if (gottenId.length() == 10) {
-            s = gottenId.substring(Contants.INDEX_CARD_INIT - 1, Contants.INDEX_CARD_FIN - 1);
-        } else if (gottenId.length() == 5){
+        } else if (gottenId.length() == 6){
             s = gottenId;
         } else {
             Toast.makeText(MainActivity.this, "Not a valid ID!", Toast.LENGTH_SHORT).show();
@@ -250,14 +248,11 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         }
         String s = id;
         String v;
-        if (id.length() == 12){
+        if (id.length() == 6 ){
+            v = "077054";
+        } else if (id.length() == 12){
             s = id.substring(Contants.INDEX_CARD_INIT, Contants.INDEX_CARD_FIN);
             v = id.substring(Contants.INDEX_VENDOR_INIT, Contants.INDEX_VENDOR_FIN);
-        } else if (id.length() == 10) {
-            s = id.substring(Contants.INDEX_CARD_INIT - 1, Contants.INDEX_CARD_FIN - 1);
-            v = id.substring(Contants.INDEX_VENDOR_INIT - 1, Contants.INDEX_VENDOR_FIN - 1);
-        } else if (id.length() == 5 ){
-            v = "77054";
         } else {
             Toast.makeText(MainActivity.this, "ID Not Valid!", Toast.LENGTH_SHORT);
             return;

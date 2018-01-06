@@ -19,10 +19,10 @@ public class Contants {
     public static final int RESULT_DELETED = 12345;
     public static final int MY_PERMISSIONS_REQUEST = 54321;
     public static final int NOTIFICATION_ID = 108;
-    public static final int INDEX_VENDOR_INIT = 1;
+    public static final int INDEX_VENDOR_INIT = 0;
     public static final int INDEX_VENDOR_FIN = 6;
     public static final int INDEX_CARD_INIT = 6;
-    public static final int INDEX_CARD_FIN = 11;
+    public static final int INDEX_CARD_FIN = 12;
 
     //DATABASE VERSION
     public static final int DATABASE_VERSION = 1;
